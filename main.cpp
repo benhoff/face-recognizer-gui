@@ -33,7 +33,8 @@ int main( int argc, const char** argv )
 	if( !eyes_cascade.load( eyes_cascade_name ) ){ printf("--(!)Error loading\n"); return -1; };
 
 	//-- 2. Read the video stream
-	capture = cvCaptureFromFile("/home/hoff/example.flv");
+	//capture = cvCaptureFromFile("/home/hoff/example.flv");
+	capture = cvCaptureFromCAM( 0 );
 	if( capture )
 	{
 		while( true )
