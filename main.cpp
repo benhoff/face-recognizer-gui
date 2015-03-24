@@ -2,6 +2,9 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include <Qt5/QtCore>
+#include <Qt5/QtWidgets>
+
 #include <iostream>
 #include <stdio.h>
 
@@ -25,6 +28,12 @@ RNG rng(12345);
 /** @function main */
 int main( int argc, const char** argv )
 {
+	QtWidgets.QApplication app(argc, argv);
+	QtWidgets.QMainWindow main_window();
+	main_window.show();
+
+	return app.exec()
+
 	CvCapture* capture;
 	Mat frame;
 
