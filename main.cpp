@@ -2,11 +2,13 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include <Qt5/QtCore>
-#include <Qt5/QtWidgets>
+#include <QApplication>
 
 #include <iostream>
 #include <stdio.h>
+
+#include "FaceDetectWidgets.h"
+
 
 using namespace std;
 using namespace cv;
@@ -14,25 +16,14 @@ using namespace cv;
 
 void detectAndDisplay( Mat frame);
 
-/** Global variable */
-
-String face_cascade_name = "haarcascade_frontalface_default.xml";
-String eyes_cascade_name = "haarcascade_eye.xml";
-
-CascadeClassifier face_cascade;
-CascadeClassifier eyes_cascade;
-
-string window_name = "Capture - Face detection";
-RNG rng(12345);
-
 /** @function main */
-int main( int argc, const char** argv )
+int main( int argc, char* argv[] )
 {
-	QtWidgets.QApplication app(argc, argv);
-	QtWidgets.QMainWindow main_window();
-	main_window.show();
+	QGuiApplication app(argc, argv);
+	CVOpenGLWidget widget();
+	widget.show();
 
-	return app.exec()
+	return app.exec();
 
 	CvCapture* capture;
 	Mat frame;
