@@ -1,4 +1,4 @@
-#include <QOpenGlWidget>
+#include <QOpenGLWidget>
 #include <QColor>
 #include <QImage>
 #include <QOpenGLFunctions>
@@ -23,23 +23,23 @@ signals:
 	void imageSizeChanged( int out_width, int out_height );
 
 public slots:
-	bool show_image( cv::Mat image); /// used to set the image to be viewed
+	bool ShowImage( cv::Mat image); /// used to set the image to be viewed
 
 	cv::CascadeClassifier face_cascade;
 	cv::CascadeClassifier eyes_cascade;
 
-	QImage qt_image; /// Qt image to be rendered
-	cv::Mat original_image; /// original OpenCv image to be shown
+	QImage qtImage; /// Qt image to be rendered
+	cv::Mat originalImage; /// original OpenCv image to be shown
 
 private:
-	int _resized_image_height;
-	int _resized_image_widgth;
-	float _image_ratio;
+	int resizedImageHeight_;
+	int resizedImageWidgth_;
+	float imageRatio_;
 
-	int _position_x;
-	int _position_y;
+	int positionX_;
+	int positionY_;
 
-	RNG _rng;
-	bool _scene_changed;
-	QColor _background_color;
+	RNG rng_;
+	bool sceneChanged_;
+	QColor backgroundColor_;
 };
