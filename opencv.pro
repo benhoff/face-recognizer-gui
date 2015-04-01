@@ -12,7 +12,4 @@ TARGET = opencv
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
-
-HEADERS  += mainwindow.h
+SOURCES += main.cpp
