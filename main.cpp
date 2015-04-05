@@ -29,8 +29,8 @@ int main( int argc, char* argv[] )
 	layoutWidget.setLayout(layout);
 
     Camera camera;
-    QObject::connect(&camera, SIGNAL(imageSignal(cv::Mat*)),
-                     &openGLWidget, SLOT(ImageSlot(cv::Mat*)));
+    QObject::connect(&camera, SIGNAL(imageSignal(QImage*)),
+                     &openGLWidget, SLOT(ImageSlot(QImage*)));
 	
 	
 	// TODO: Add in slot to turn off camera, or something

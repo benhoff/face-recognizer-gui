@@ -109,24 +109,9 @@ void CVOpenGLWidget::renderImage()
     }
 }
 
-bool CVOpenGLWidget::ImageSlot( cv::Mat image )
+bool CVOpenGLWidget::ImageSlot(QImage image )
 {
-    image.copyTo( originalImage );
-
-    imageRatio_ = (float) image.cols/(float)image.rows;
-
-    if( originalImage.channels() == 3 )
-        qtImage = QImage((const unsigned char*)(originalImage.data),
-                          originalImage.cols, originalImage.rows,
-                          originalImage.step, QImage::Format_RGB888).rgbSwapped();
-
-    else if( originalImage.channels() == 1)
-        qtImage = QImage((const unsigned char*)(originalImage.data),
-                          originalImage.cols, originalImage.rows,
-                          originalImage.step, QImage::Format_Indexed8);
-
-    else
-        return false;
+    imageRatio_ = (float) image.height()/(float)image.width();
 
     // TODO: Do not use QGLWidget functions, class is depriciated
     qtImage = QGLWidget::convertToGLFormat(qtImage);

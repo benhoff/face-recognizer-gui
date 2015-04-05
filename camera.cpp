@@ -2,6 +2,7 @@
 
 Camera::Camera(QObject* parent) : QObject(parent)
 {
+    capture = new cv::VideoCapture();
     cv::String faceCascadeFilename = "haarcascade_frontalface_default.xml";
     cv::String eyeCascadeFilename = "haarcascade_eye.xml";
 
@@ -9,8 +10,34 @@ Camera::Camera(QObject* parent) : QObject(parent)
 	
 }
 
-void Camera::loadFiles(cv::string faceCascadeFilename,
-                       cv::string eyeCascadeFilename)
+Camera::~Camera()
+{
+    capture->~VideoCapture();
+}
+
+QImage Camera::convertToQImage(cv::Mat frame)
+{
+    QImage qtImage;
+    if( frame.channels() == 3 )
+    {
+        qtImage = QImage((const unsigned char*)(frame.data),
+                          frame.cols, frame.rows,
+                          frame.step, QImage::Format_RGB888).rgbSwapped();
+    }
+
+    else if( frame.channels() == 1)
+    {
+        qtImage = QImage((const unsigned char*)(frame.data),
+                          frame.cols, frame.rows,
+                          frame.step, QImage::Format_Indexed8);
+    }
+
+    // Note: implicit return of empty QImage if channels != 1 or 3
+    return qtImage;
+}
+
+void Camera::loadFiles(cv::String faceCascadeFilename,
+                       cv::String eyeCascadeFilename)
 {
     // TODO: Add in a try catch statement here
     if( !faceCascade.load( faceCascadeFilename ) )
@@ -26,13 +53,13 @@ void Camera::loadFiles(cv::string faceCascadeFilename,
 
 void Camera::runSlot(int cameraNumber)
 {
-	// TODO: want to be able to select this
-	capture = cvCaptureFromCAM( cameraNumber );
-	if( capture )
+    // TODO: want to be able to select this
+    capture->open(cameraNumber);
+    if( capture->isOpened() )
 	{
 		while( true )
-		{
-			frame = cvQueryFrame( capture );
+        {
+            capture->read(frame);
 			if( !frame.empty() )
 			{
 				detectAndDisplay( frame );
@@ -91,6 +118,6 @@ void Camera::detectAndDisplay( cv::Mat frame )
 		}
 
     }
-    cv::Mat* emitPtr = &frame;
-    emit imageSignal(emitPtr);
+    QImage image = convertToQImage(frame);
+    emit imageSignal(&image);
 }

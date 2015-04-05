@@ -11,6 +11,7 @@
 
 class CVOpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
+Q_OBJECT
 public:
     CVOpenGLWidget(QWidget *parent=0);
 
@@ -25,16 +26,16 @@ signals:
 	void imageSizeChanged( int out_width, int out_height );
 
 public slots:
-    bool ImageSlot( cv::Mat image); /// used to set the image to be viewed
+    bool ImageSlot( QImage image); /// used to set the image to be viewed
 
-	cv::CascadeClassifier face_cascade;
-	cv::CascadeClassifier eyes_cascade;
-
-	QImage qtImage; /// Qt image to be rendered
-	cv::Mat originalImage; /// original OpenCv image to be shown
 
 private:
-	int resizedImageHeight_;
+    cv::CascadeClassifier face_cascade;
+    cv::CascadeClassifier eyes_cascade;
+
+    QImage qtImage; /// Qt image to be rendered
+
+    int resizedImageHeight_;
     int resizedImageWidth_;
 	float imageRatio_;
 
