@@ -1,16 +1,18 @@
+#pragma once
 #include <QOpenGLWidget>
 #include <QColor>
 #include <QImage>
 #include <QOpenGLFunctions>
+#include <QGLWidget>
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-class CVOpenGLWidget : public QOpenGlWidget, protected QOpenGLFunctions
+class CVOpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
 public:
-	CVOpenGLWidget(QWidget *parent);
+    CVOpenGLWidget(QWidget *parent=0);
 
 	void paintGL(); /// OpenGl Rendering
 	void resizeGL(int width, int height); /// Widget Resize Event
@@ -23,7 +25,7 @@ signals:
 	void imageSizeChanged( int out_width, int out_height );
 
 public slots:
-	bool ShowImage( cv::Mat image); /// used to set the image to be viewed
+    bool ImageSlot( cv::Mat image); /// used to set the image to be viewed
 
 	cv::CascadeClassifier face_cascade;
 	cv::CascadeClassifier eyes_cascade;
@@ -33,13 +35,13 @@ public slots:
 
 private:
 	int resizedImageHeight_;
-	int resizedImageWidgth_;
+    int resizedImageWidth_;
 	float imageRatio_;
 
 	int positionX_;
 	int positionY_;
 
-	RNG rng_;
+    cv::RNG rng_;
 	bool sceneChanged_;
 	QColor backgroundColor_;
 };

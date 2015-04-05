@@ -13,3 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp
+SOURCES  += CVOpenGLWidget.cpp
+SOURCES += camera.cpp
+
+HEADERS += CVOpenGLWidget.h
+HEADERS += camera.h

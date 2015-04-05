@@ -1,143 +1,139 @@
-#include <iostream>
-#include <stdio.h>
+#include "CVOpenGLWidget.h"
 
-class CVOpenGLWidget : QtWidgets.QOpenGlWidget
+CVOpenGLWidget::CVOpenGLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
 
-	CVOpenGLWidget::CVOpenGLWidget(QWidget *parent) : QGLWidget(parent)
-	{
-		
-		sceneChanged_ = false;
-		backgroundColor_ = QColor::fromRgb(150, 150, 150);
-		
-		imageRatio_ = 4.0f/3.0f;
+    sceneChanged_ = false;
+    backgroundColor_ = QColor::fromRgb(150, 150, 150);
 
-		rng_ = RNG('12345');
-	}
+    imageRatio_ = 4.0f/3.0f;
 
-	void initializeGL()
-	{
-		//makeCurrent();	
-		initializeOpenGLFunctions();
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	}
+    rng_ = cv::RNG(12345);
+}
 
-	// Render the openGL scene
-	void paintGL()
-	{
-		makeCurrent();
-		if( !sceneChanged_ )
-			return;
+void CVOpenGLWidget::initializeGL()
+{
+    //makeCurrent();
+    initializeOpenGLFunctions();
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+}
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+// Render the openGL scene
+void CVOpenGLWidget::paintGL()
+{
+    makeCurrent();
+    if( !sceneChanged_ )
+        return;
 
-		renderImage();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		sceneChanged_ = false;
-	}
+    renderImage();
 
-	void resizeGL(int width, int height)
-	{
-		makeCurrent();
-		glViewport(0, 0, (GLint)width, (GLint)height);
+    sceneChanged_ = false;
+}
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
+void CVOpenGLWidget::resizeGL(int width, int height)
+{
+    makeCurrent();
+    glViewport(0, 0, (GLint)width, (GLint)height);
 
-		glOrtho(0, width, 0, height, 0, 1); // To draw image in the center of the area
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 
-		glMatrixMode(GL_MODEL_VIEW);
+    glOrtho(0, width, 0, height, 0, 1); // To draw image in the center of the area
 
-		// Scaled Image sizes
-		resizedImageHeight_ = width/imageRatio_;
-		resizedImageWidth_ = width;
-		
-		if( resizedImageHeight_ > height)
-		{
-			resizedImageWidth_ = height * imageRatio_;
-			resizedImageHeight_ = height;
-		}
+    glMatrixMode(GL_MODELVIEW);
 
-		emit imageSizeChanged( resizedImageWidth_, resizedImageHeight_ )
+    // Scaled Image sizes
+    resizedImageHeight_ = width/imageRatio_;
+    resizedImageWidth_ = width;
 
-		positionX_ = (width - resizedImageWidth_)/2;
-		positionY_ = (height - resizedImageHeight_)/2;
+    if( resizedImageHeight_ > height)
+    {
+        resizedImageWidth_ = height * imageRatio_;
+        resizedImageHeight_ = height;
+    }
 
-		sceneChanged_ = true;
-		updateScene();
-	}
+    emit imageSizeChanged( resizedImageWidth_, resizedImageHeight_ );
 
-	void updateScene()
-	{
-		if( sceneChanged_ && this->isVisible() )
-			updateGL();
-	}
+    positionX_ = (width - resizedImageWidth_)/2;
+    positionY_ = (height - resizedImageHeight_)/2;
 
-	void renderImage()
-	{
-		makeCurrent();
-		glClear(GL_COLOR_BUFFER_BIT);
+    sceneChanged_ = true;
+    updateScene();
+}
 
-		if (!qt_image.isNull())
-		{
-			glLoadIdentity();
-			QImage image; // the image rendered
+void CVOpenGLWidget::updateScene()
+{
+    if( sceneChanged_ && this->isVisible() )
+        renderImage();
+}
 
-			glPushMatrix();
-			{
-				int imW = qtImage.width();
-				int imH = qtImage.height();
+void CVOpenGLWidget::renderImage()
+{
+    makeCurrent();
+    glClear(GL_COLOR_BUFFER_BIT);
 
-				// Does the image need to be resized to fit widget?
-				if ( imW != this->size().width() && imH != this->size().height() )
-				{
-					image = qt_image.scaled(QSize(resizedImageWidth_, 
-												  resizedImageHeight_),
-											Qt::IgnoreAspectRatio,
-											Qt::SmoothTransformation);
-				}
-				else
-					image = qtImage;
+    if (!qtImage.isNull())
+    {
+        glLoadIdentity();
+        QImage image; // the image rendered
 
-				glRasterPos2i( positionX_, positionY_);
+        glPushMatrix();
+        {
+            int imW = qtImage.width();
+            int imH = qtImage.height();
 
-				imW = image.width();
-				imH = image.height();
+            // Does the image need to be resized to fit widget?
+            if ( imW != this->size().width() && imH != this->size().height() )
+            {
+                image = qtImage.scaled(QSize(resizedImageWidth_,
+                                              resizedImageHeight_),
+                                        Qt::IgnoreAspectRatio,
+                                        Qt::SmoothTransformation);
+            }
+            else
+                image = qtImage;
 
-				glDrawPixels( imW, imH, GL_RGBA, GL_UNSIGNED_BYTE, image.bits());
-			}
-			glPopMatrix();
+            glRasterPos2i( positionX_, positionY_);
 
-			// end
-			glFlush();
-		}
-	}
+            imW = image.width();
+            imH = image.height();
 
-	bool CVOpenGLWidget( cv::Mat image )
-	{
-		image.copyTo( originalImage );
+            glDrawPixels( imW, imH, GL_RGBA, GL_UNSIGNED_BYTE, image.bits());
+        }
+        glPopMatrix();
 
-		imageRatio_ = (float) image.cols/(float)image.rows;
+        // end
+        glFlush();
+    }
+}
 
-		if( originalImage.channels == 3 )
-			qtImage = QImage((const unsigned char*)(originalImage.data),
-							  originalImage.cols, originalImage.rows,
-							  originalImage.step, QImage::Foramt_RGB888).rgbSwapped();
+bool CVOpenGLWidget::ImageSlot( cv::Mat image )
+{
+    image.copyTo( originalImage );
 
-		else if( originalImage.channels() == 1)
-			qtImage = QImage((const unsigned char*)(originalImage.data),
-							  originalImage.cols, originalImage.rows,
-							  originalImage.step, QImage::Format_Indexed8);
+    imageRatio_ = (float) image.cols/(float)image.rows;
 
-		else
-			return false;
+    if( originalImage.channels() == 3 )
+        qtImage = QImage((const unsigned char*)(originalImage.data),
+                          originalImage.cols, originalImage.rows,
+                          originalImage.step, QImage::Format_RGB888).rgbSwapped();
 
-		qtImage = QGlWidget:;convertToGLFormat(qt_image);
+    else if( originalImage.channels() == 1)
+        qtImage = QImage((const unsigned char*)(originalImage.data),
+                          originalImage.cols, originalImage.rows,
+                          originalImage.step, QImage::Format_Indexed8);
 
-		sceneChaged_ = true;
+    else
+        return false;
 
-		updateScene();
+    // TODO: Do not use QGLWidget functions, class is depriciated
+    qtImage = QGLWidget::convertToGLFormat(qtImage);
 
-		return true;
-	}
-};
+    sceneChanged_ = true;
+
+    updateScene();
+
+    return true;
+}

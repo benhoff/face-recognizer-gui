@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 #include "CVOpenGLWidget.h"
-#include "thisGarbage.h"
+#include "camera.h"
 
 using namespace std;
 
@@ -15,23 +15,25 @@ using namespace std;
 int main( int argc, char* argv[] )
 {
 	QApplication app(argc, argv);
-	QWidget layoutWidget();
+    QWidget layoutWidget;
 
-	CVOpenGLWidget openGLWidget(layoutWidget);
+    CVOpenGLWidget openGLWidget(&layoutWidget);
 	
 	QVBoxLayout *layout = new QVBoxLayout;
-	layout->addWidget(openGLWidget);
+    layout->addWidget(&openGLWidget);
 	
-	QPushButton *runButton = new QPushButton('Run');
+    QPushButton *runButton = new QPushButton("run");
 
 	layout->addWidget(runButton);
 	
 	layoutWidget.setLayout(layout);
 
-	Camera camera();
-	QObject::connect(&camera, SIGNAL(imageSignal(cv::Mat)), 
-					 &widget, SLOT(ShowImage(cv::Mat));
-
+    Camera camera;
+    QObject::connect(&camera, SIGNAL(imageSignal(cv::Mat*)),
+                     &openGLWidget, SLOT(ImageSlot(cv::Mat*)));
+	
+	
+	// TODO: Add in slot to turn off camera, or something
 	QObject::connect(runButton, SIGNAL(clicked()), 
 					 &camera, SLOT(runSlot()));
 
