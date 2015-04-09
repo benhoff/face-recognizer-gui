@@ -3,8 +3,8 @@
 Camera::Camera(QObject* parent) : QObject(parent)
 {
     capture = new cv::VideoCapture();
-    cv::String faceCascadeFilename = "haarcascade_frontalface_default.xml";
-    cv::String eyeCascadeFilename = "haarcascade_eye.xml";
+    cv::String faceCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_frontalface_default.xml";
+    cv::String eyeCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_eye.xml";
 
     loadFiles(faceCascadeFilename, eyeCascadeFilename);
 	
@@ -51,8 +51,9 @@ void Camera::loadFiles(cv::String faceCascadeFilename,
     }
 }
 
-void Camera::runSlot(int cameraNumber)
+void Camera::runSlot()
 {
+    int cameraNumber=1;
     // TODO: want to be able to select this
     capture->open(cameraNumber);
     if( capture->isOpened() )

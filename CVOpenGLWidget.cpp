@@ -21,7 +21,6 @@ void CVOpenGLWidget::initializeGL()
 // Render the openGL scene
 void CVOpenGLWidget::paintGL()
 {
-    makeCurrent();
     if( !sceneChanged_ )
         return;
 
@@ -34,7 +33,6 @@ void CVOpenGLWidget::paintGL()
 
 void CVOpenGLWidget::resizeGL(int width, int height)
 {
-    makeCurrent();
     glViewport(0, 0, (GLint)width, (GLint)height);
 
     glMatrixMode(GL_PROJECTION);
@@ -60,7 +58,7 @@ void CVOpenGLWidget::resizeGL(int width, int height)
     positionY_ = (height - resizedImageHeight_)/2;
 
     sceneChanged_ = true;
-    updateScene();
+    paintGL();
 }
 
 void CVOpenGLWidget::updateScene()
@@ -109,16 +107,15 @@ void CVOpenGLWidget::renderImage()
     }
 }
 
-bool CVOpenGLWidget::ImageSlot(QImage image )
+bool CVOpenGLWidget::ImageSlot(QImage* image )
 {
-    imageRatio_ = (float) image.height()/(float)image.width();
+    imageRatio_ = (float) image->height()/(float)image->width();
 
     // TODO: Do not use QGLWidget functions, class is depriciated
-    qtImage = QGLWidget::convertToGLFormat(qtImage);
+    qtImage = QGLWidget::convertToGLFormat(*image);
 
     sceneChanged_ = true;
 
-    updateScene();
-
+    paintGL();
     return true;
 }

@@ -28,7 +28,7 @@ public:
     cv::CascadeClassifier eyeCascade;
 
 public slots:
-    void runSlot(int cameraNumber);
+    void runSlot();
 
 signals:
     void imageSignal(QImage* image);
