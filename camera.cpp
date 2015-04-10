@@ -53,9 +53,8 @@ void Camera::loadFiles(cv::String faceCascadeFilename,
 
 void Camera::runSlot()
 {
-    int cameraNumber=1;
     // TODO: want to be able to select this
-    capture->open(cameraNumber);
+    capture->open(cameraIndex_);
     if( capture->isOpened() )
 	{
 		while( true )
@@ -69,34 +68,36 @@ void Camera::runSlot()
 			{
 				std::cout << "No captured frame -- Break!" << std::endl;
 				break;
-				
 			}
 
             int c = cv::waitKey(10);
 			if( (char)c == 'c') 
 			{ 
-				break; 
+                break;
+                std::cout << "Break!";
 			}
 
 		}
 	}
 }
 
+void Camera::cameraIndexSlot(int index)
+{
+    cameraIndex_ = index;
+}
+
 void Camera::detectAndDisplay( cv::Mat frame )
 {
     std::vector<cv::Rect> faces;
-    cv::Mat frameGray;
-
-    cvtColor( frame, frameGray, CV_BGR2GRAY );
-    equalizeHist( frameGray, frameGray );
-
-	//-- Detect face
-    faceCascade.detectMultiScale( frameGray,
-					   faces, 1.1, 2, 
-                       0|CV_HAAR_SCALE_IMAGE, cv::Size(30, 30) );
-
+    // Calculate the camera size and set the size to 1/8 of screen height
+    faceCascade.detectMultiScale(frame, faces, 1.1, 3, 0,
+                          cv::Size(frame.cols/8, frame.rows/8),
+                          cv::Size(frame.cols, frame.rows));
+    //-- Detect face
 	for( size_t i = 0; i < faces.size(); i++)
-	{
+    {
+        rectangle(frame, faces[i], cv::Scalar( 255, 0, 255 ));
+        /*
         cv::Point center( faces[i].x + faces[i].width*0.5,
 				  faces[i].y + faces[i].height*0.5);
 
@@ -116,7 +117,8 @@ void Camera::detectAndDisplay( cv::Mat frame )
 					  faces[i].y + eyes[j].y + eyes[j].height*0.5 );
 			int radius = cvRound( (eyes[j].width + eyes[j].height) *0.25);
             circle( frame, center, radius, cv::Scalar( 255, 0, 0 ), 4, 8, 0);
-		}
+        }
+        */
 
     }
     QImage image = convertToQImage(frame);

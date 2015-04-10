@@ -29,10 +29,14 @@ public:
 
 public slots:
     void runSlot();
+    void cameraIndexSlot(int index);
 
 signals:
     void imageSignal(QImage* image);
 
 protected:
     void loadFiles(cv::String faceCascadeFilename, cv::String eyesCascadeFilename);
+
+private:
+    int cameraIndex_;
 };
