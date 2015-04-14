@@ -7,7 +7,7 @@ Camera::Camera(QObject* parent) : QObject(parent)
     cv::String eyeCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_eye.xml";
 
     loadFiles(faceCascadeFilename, eyeCascadeFilename);
-	
+    usingVideoCamera_ = true;
 }
 
 Camera::~Camera()
@@ -54,7 +54,11 @@ void Camera::loadFiles(cv::String faceCascadeFilename,
 void Camera::runSlot()
 {
     // TODO: want to be able to select this
-    capture->open(cameraIndex_);
+    if (usingVideoCamera_)
+        capture->open(cameraIndex_);
+    else
+        capture->open(videoFileName_);
+
     if( capture->isOpened() )
 	{
 		while( true )
@@ -81,9 +85,19 @@ void Camera::runSlot()
 	}
 }
 
+void Camera::usingVideoCameraSlot(bool value)
+{
+    usingVideoCamera_ = value;
+}
+
 void Camera::cameraIndexSlot(int index)
 {
     cameraIndex_ = index;
+}
+
+void Camera::videoFileNameSlot(QString fileName)
+{
+    videoFileName_ = fileName.toStdString().c_str();
 }
 
 void Camera::detectAndDisplay( cv::Mat frame )

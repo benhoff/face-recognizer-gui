@@ -30,6 +30,8 @@ public:
 public slots:
     void runSlot();
     void cameraIndexSlot(int index);
+    void videoFileNameSlot(QString fileName);
+    void usingVideoCameraSlot(bool value);
 
 signals:
     void imageSignal(QImage* image);
@@ -38,5 +40,7 @@ protected:
     void loadFiles(cv::String faceCascadeFilename, cv::String eyesCascadeFilename);
 
 private:
+    bool usingVideoCamera_;
     int cameraIndex_;
+    cv::String videoFileName_;
 };
