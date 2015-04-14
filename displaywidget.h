@@ -9,7 +9,6 @@
 #include <QRadioButton>
 #include <QComboBox>
 #include <QFileDialog>
-#include <QFile>
 
 #include <iostream>
 #include <stdio.h>
