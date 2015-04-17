@@ -11,11 +11,17 @@
 #include <stdio.h>
 #include <iostream>
 #include <QImage>
+#include <QBasicTimer>
 
 class Camera : public QObject
 {
     Q_OBJECT
-    QScopedPointer<cv::VideoCapture> capture;
+    QScopedPointer<cv::VideoCapture> videoCapture_;
+    QBasicTime timer_;
+    bool run_;
+    bool usingVideoCamera_;
+    int cameraIndex_;
+    cv::String videoFileName_;
 public:
     Camera(QObject* parent = 0);
     ~Camera();
@@ -30,13 +36,12 @@ public slots:
     void cameraIndexSlot(int index);
     void videoFileNameSlot(QString fileName);
     void usingVideoCameraSlot(bool value);
+    void stopped();
 
 signals:
+    void started();
     void matReady(const cv::Mat &);
 
 private:
-    bool run_;
-    bool usingVideoCamera_;
-    int cameraIndex_;
-    cv::String videoFileName_;
+    void timerEvent(QTimeEvent * ev);
 };

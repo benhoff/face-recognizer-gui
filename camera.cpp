@@ -13,37 +13,35 @@ Camera::~Camera()
 
 void Camera::runSlot()
 {
-    run_ = true;
-    // TODO: want to be able to select this
-    if (usingVideoCamera_)
-        capture->open(cameraIndex_);
-    else
-        capture->open(videoFileName_);
+    // TODO: clean up. Would be nice not to have nested `if` statements
+    if (!videoCapture_)
+        if (usingVideoCamera_)
+            videoCapture_.reset(new cv::VideoCapture(cameraIndex_));
+        else
+            videoCapture_.reset(new cv::VideoCapture(videoFileName_));
+    if (videoCapture_->isOpened())
+    {
+       timer_.start(0, this);
+       emit started();
+    }
+}
 
-    if( capture->isOpened() )
-	{
-        while( run_ )
-        {
-            capture->read(frame_);
-            if( !frame_.empty() )
-            {
-                // This is going to become an emit signal to our convertor class
-                //detectAndDisplay( frame );
-			}
-			else
-			{
-				std::cout << "No captured frame -- Break!" << std::endl;
-				break;
-			}
+void Camera::stopped()
+{
+    timer_.stop();
+}
 
-            int c = cv::waitKey(10);
-			if( (char)c == 'c') 
-			{ 
-                break;
-                std::cout << "Break!";
-			}
-		}
-	}
+void Camera::timerEvent(QTimeEvent *ev)
+{
+    if (ev->timerId() != timer_.timerId())
+        return;
+    cv::Mat frame;
+    if (videoCapture_->read(frame)) // Blocks until a new frame is ready
+    {
+        timer_.stop();
+        return
+    }
+    emit matReady(frame);
 }
 
 void Camera::usingVideoCameraSlot(bool value)

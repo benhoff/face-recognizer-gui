@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <opencv2/opencv.hpp>
 
-class convertor : public QObject
+class Convertor : public QObject
 {
     Q_OBJECT
     QBasicTimer timer_;
