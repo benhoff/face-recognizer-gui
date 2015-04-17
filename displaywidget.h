@@ -28,6 +28,9 @@ signals:
 
 public slots:
     void openFileDialog();
+
+private:
+    Camera* camera_;
 };
 
 #endif // DISPLAYWIDGET_H

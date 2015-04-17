@@ -7,25 +7,23 @@
 #include <opencv2/imgcodecs.hpp>
 
 #include <QObject>
+#include <QScopedPointer>
 #include <stdio.h>
 #include <iostream>
 #include <QImage>
 
 class Camera : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+    QScopedPointer<cv::VideoCapture> capture;
 public:
     Camera(QObject* parent = 0);
     ~Camera();
-    cv::VideoCapture* capture;
-    cv::Mat frame;
 
-    void detectAndDisplay( cv::Mat frame );
+    void detectAndDisplay( QScopedPointer<cv::Mat> frame );
 
     QImage convertToQImage( cv::Mat frame );
 
-    cv::CascadeClassifier faceCascade;
-    cv::CascadeClassifier eyeCascade;
 
 public slots:
     void runSlot();
@@ -34,12 +32,10 @@ public slots:
     void usingVideoCameraSlot(bool value);
 
 signals:
-    void imageSignal(QImage* image);
-
-protected:
-    void loadFiles(cv::String faceCascadeFilename, cv::String eyesCascadeFilename);
+    void matReady(const cv::Mat &);
 
 private:
+    bool run_;
     bool usingVideoCamera_;
     int cameraIndex_;
     cv::String videoFileName_;

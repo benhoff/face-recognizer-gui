@@ -17,9 +17,11 @@ SOURCES += main.cpp \
     mainwindow.cpp \
     CVOpenGLWidget.cpp \
     camera.cpp \
-    displaywidget.cpp
+    displaywidget.cpp \
+    convertor.cpp
 
 HEADERS += CVOpenGLWidget.h \
     mainwindow.h \
     camera.h \
-    displaywidget.h
+    displaywidget.h \
+    convertor.h

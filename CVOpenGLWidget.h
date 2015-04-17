@@ -26,7 +26,7 @@ signals:
 	void imageSizeChanged( int out_width, int out_height );
 
 public slots:
-    bool ImageSlot(QImage* image); /// used to set the image to be viewed
+    bool ImageSlot(const QImage &image); /// used to set the image to be viewed
 
 
 private:
