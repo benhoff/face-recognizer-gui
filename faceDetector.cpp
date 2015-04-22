@@ -1,15 +1,15 @@
-#include "convertor.h"
+#include "faceDetector.h"
 
-convertor::convertor(QObject *parent) : QObject(parent)
+FaceDetector::FaceDetector(QObject *parent ) : QObject(parent), processAll_(true)
 {
-
+    // TODO: STOP HARDCODING THIS!
     cv::String faceCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_frontalface_default.xml";
     cv::String eyeCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_eye.xml";
 
     loadFiles(faceCascadeFilename, eyeCascadeFilename);
 }
 
-void convertor::loadFiles(cv::String faceCascadeFilename,
+void FaceDetector::loadFiles(cv::String faceCascadeFilename,
                        cv::String eyeCascadeFilename)
 {
     // TODO: Add in a try catch statement here
@@ -23,12 +23,12 @@ void convertor::loadFiles(cv::String faceCascadeFilename,
         std::cout << "Error Loading" << eyeCascadeFilename << std::endl;
     }
 }
-convertor::~convertor() : QObject(parent), processAll_(true)
+FaceDetector::~FaceDetector()
 {
 
 }
 
-void convertor::process_frame(const cv::Mat &frame)
+void FaceDetector::processFrame(const cv::Mat &frame)
 {
     if (processAll_)
         process(frame);
@@ -36,17 +36,14 @@ void convertor::process_frame(const cv::Mat &frame)
         queue(frame);
 }
 
-void convertor::setProcessAll(bool all)
+void FaceDetector::setProcessAll(bool all)
 {
     processAll_ = all;
 }
 
-void convertor::process(cv::Mat frame)
+void FaceDetector::process(cv::Mat frame)
 {
     cv::resize(frame, frame, cv::Size(), 0.3, 0.3, cv::INTER_AREA);
-
-    // Add in facial recognition logic here
-    cv::cvtColor(frame, frame, CV_BGR2RGB);
 
     std::vector<cv::Rect> faces;
     // Calculate the camera size and set the size to 1/8 of screen height
@@ -56,7 +53,7 @@ void convertor::process(cv::Mat frame)
     //-- Detect face
     for( size_t i = 0; i < faces.size(); i++)
     {
-        rectangle(*frame, (*faces)[i], cv::Scalar( 255, 0, 255 ));
+        cv::rectangle(frame, faces[i], cv::Scalar( 255, 0, 255 ));
         /*
         cv::Point center( faces[i].x + faces[i].width*0.5,
                   faces[i].y + faces[i].height*0.5);
@@ -82,11 +79,11 @@ void convertor::process(cv::Mat frame)
 
     }
     const QImage image(frame.data, frame.cols, frame.rows, frame.step,
-                     QImage::Format_RGB888, &matDeleter, new cv::Mat(frame));
+                       QImage::Format_RGB888, &matDeleter, new cv::Mat(frame));
     Q_ASSERT(image.constBits() == frame.data);
     emit image_signal(image);
 }
-void convertor::timerEvent(QTimerEvent *ev)
+void FaceDetector::timerEvent(QTimerEvent *ev)
 {
     if (ev->timerId() != timer_.timerId())
         return;
@@ -95,7 +92,7 @@ void convertor::timerEvent(QTimerEvent *ev)
     timer_.stop();
 }
 
-void convertor::queue(const cv::Mat &frame)
+void FaceDetector::queue(const cv::Mat &frame)
 {
     if (!frame.empty())
         qDebug() << "Converter dropped frame !";
@@ -106,7 +103,7 @@ void convertor::queue(const cv::Mat &frame)
 }
 
 
-void convertor::matDeleter(void *mat)
+void FaceDetector::matDeleter(void *mat)
 {
     delete static_cast<cv::Mat*>(mat);
 }

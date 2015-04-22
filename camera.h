@@ -8,16 +8,18 @@
 
 #include <QObject>
 #include <QScopedPointer>
+#include <QTimerEvent>
 #include <stdio.h>
 #include <iostream>
 #include <QImage>
 #include <QBasicTimer>
+#include <QDebug>
 
 class Camera : public QObject
 {
     Q_OBJECT
     QScopedPointer<cv::VideoCapture> videoCapture_;
-    QBasicTime timer_;
+    QBasicTimer timer_;
     bool run_;
     bool usingVideoCamera_;
     int cameraIndex_;
@@ -25,9 +27,6 @@ class Camera : public QObject
 public:
     Camera(QObject* parent = 0);
     ~Camera();
-
-    void detectAndDisplay( QScopedPointer<cv::Mat> frame );
-
     QImage convertToQImage( cv::Mat frame );
 
 
@@ -43,5 +42,5 @@ signals:
     void matReady(const cv::Mat &);
 
 private:
-    void timerEvent(QTimeEvent * ev);
+    void timerEvent(QTimerEvent * ev);
 };

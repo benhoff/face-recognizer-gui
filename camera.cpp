@@ -2,9 +2,7 @@
 
 Camera::Camera(QObject* parent) : QObject(parent)
 {
-    capture = new cv::VideoCapture();
     usingVideoCamera_ = true;
-    frame_ = new cv::Mat
 }
 
 Camera::~Camera()
@@ -21,8 +19,8 @@ void Camera::runSlot()
             videoCapture_.reset(new cv::VideoCapture(videoFileName_));
     if (videoCapture_->isOpened())
     {
-       timer_.start(0, this);
-       emit started();
+        timer_.start(0, this);
+        emit started();
     }
 }
 
@@ -31,15 +29,15 @@ void Camera::stopped()
     timer_.stop();
 }
 
-void Camera::timerEvent(QTimeEvent *ev)
+void Camera::timerEvent(QTimerEvent *ev)
 {
     if (ev->timerId() != timer_.timerId())
         return;
     cv::Mat frame;
-    if (videoCapture_->read(frame)) // Blocks until a new frame is ready
+    if (!videoCapture_->read(frame)) // Blocks until a new frame is ready
     {
         timer_.stop();
-        return
+        return;
     }
     emit matReady(frame);
 }
@@ -57,12 +55,4 @@ void Camera::cameraIndexSlot(int index)
 void Camera::videoFileNameSlot(QString fileName)
 {
     videoFileName_ = fileName.toStdString().c_str();
-}
-
-void Camera::detectAndDisplay( QScopedPoint<cv::Mat> frame )
-{
-    const QImage image(frame->data, frame->cols, frame->rows, frame->step,
-                       QImage::Format_RGB888, matDeleter, frame.take());
-    emit imageSignal(&image);
-    cv::waitKey(30);
 }

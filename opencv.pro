@@ -18,10 +18,10 @@ SOURCES += main.cpp \
     CVOpenGLWidget.cpp \
     camera.cpp \
     displaywidget.cpp \
-    convertor.cpp
+    faceDetector.cpp
 
 HEADERS += CVOpenGLWidget.h \
     mainwindow.h \
     camera.h \
     displaywidget.h \
-    convertor.h
+    faceDetector.h

@@ -2,8 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include "mainwindow.h"
 
-using namespace std;
-
+Q_DECLARE_METATYPE(cv::Mat)
 /** @function main */
 int main( int argc, char* argv[] )
 {

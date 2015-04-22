@@ -4,6 +4,7 @@
 #include <QImage>
 #include <QOpenGLFunctions>
 #include <QGLWidget>
+#include <QDebug>
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
@@ -26,7 +27,7 @@ signals:
 	void imageSizeChanged( int out_width, int out_height );
 
 public slots:
-    bool ImageSlot(const QImage &image); /// used to set the image to be viewed
+    void imageSlot(const QImage &image); /// used to set the image to be viewed
 
 
 private:

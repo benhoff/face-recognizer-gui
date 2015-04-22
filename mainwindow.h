@@ -2,11 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QThread>
 
 #include "displaywidget.h"
-#include "convertor.h"
-#include "camera.h"
 
 class MainWindow : public QMainWindow
 {
@@ -14,8 +11,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
-signals:
+private:
 };
 
 #endif // MAINWINDOW_H

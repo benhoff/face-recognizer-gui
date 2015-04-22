@@ -107,15 +107,13 @@ void CVOpenGLWidget::renderImage()
     }
 }
 
-bool CVOpenGLWidget::ImageSlot(QImage* image )
+void CVOpenGLWidget::imageSlot(const QImage &image)
 {
-    imageRatio_ = (float) image->height()/(float)image->width();
-
+    imageRatio_ = (float) image.height()/(float)image.width();
     // TODO: Do not use QGLWidget functions, class is depriciated
-    qtImage = QGLWidget::convertToGLFormat(*image);
+    qtImage = QGLWidget::convertToGLFormat(image);
 
     sceneChanged_ = true;
 
     paintGL();
-    return true;
 }
