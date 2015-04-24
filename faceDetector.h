@@ -36,4 +36,12 @@ public slots:
     void processFrame(const cv::Mat& frame);
 };
 
+FaceDetector::FaceDetector(QObject *parent ) : QObject(parent), processAll_(true)
+{
+    // TODO: STOP HARD CODING THIS!
+    cv::String faceCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_frontalface_default.xml";
+    cv::String eyeCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_eye.xml";
+
+    loadFiles(faceCascadeFilename, eyeCascadeFilename);
+}
 #endif // FACEDETECTOR_H

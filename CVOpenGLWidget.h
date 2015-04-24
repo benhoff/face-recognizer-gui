@@ -31,9 +31,6 @@ public slots:
 
 
 private:
-    cv::CascadeClassifier face_cascade;
-    cv::CascadeClassifier eyes_cascade;
-
     QImage qtImage; /// Qt image to be rendered
 
     int resizedImageHeight_;

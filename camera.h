@@ -25,7 +25,11 @@ class Camera : public QObject
     int cameraIndex_;
     cv::String videoFileName_;
 public:
-    Camera(QObject* parent = 0);
+    Camera(QObject* parent) : QObject(parent)
+    {
+        usingVideoCamera_ = true;
+    }
+
     ~Camera();
     QImage convertToQImage( cv::Mat frame );
 

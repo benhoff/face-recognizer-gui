@@ -1,13 +1,5 @@
 #include "faceDetector.h"
 
-FaceDetector::FaceDetector(QObject *parent ) : QObject(parent), processAll_(true)
-{
-    // TODO: STOP HARDCODING THIS!
-    cv::String faceCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_frontalface_default.xml";
-    cv::String eyeCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_eye.xml";
-
-    loadFiles(faceCascadeFilename, eyeCascadeFilename);
-}
 
 void FaceDetector::loadFiles(cv::String faceCascadeFilename,
                        cv::String eyeCascadeFilename)
@@ -43,13 +35,14 @@ void FaceDetector::setProcessAll(bool all)
 
 void FaceDetector::process(cv::Mat frame)
 {
-    cv::resize(frame, frame, cv::Size(), 0.3, 0.3, cv::INTER_AREA);
+    cv::Mat grey_image;
+    cv::cvtColor(frame, grey_image, CV_BGR2GRAY);
+    cv::equalizeHist(grey_image, grey_image);
 
     std::vector<cv::Rect> faces;
     // Calculate the camera size and set the size to 1/8 of screen height
-    faceCascade.detectMultiScale(frame, faces, 1.1, 3, 0,
-                          cv::Size(frame.cols/8, frame.rows/8),
-                          cv::Size(frame.cols, frame.rows));
+    faceCascade.detectMultiScale(grey_image, faces, 1.1, 2,  0|CV_HAAR_SCALE_IMAGE,
+                                 cv::Size(frame.cols/4, frame.rows/4)); // Minimum size of obj
     //-- Detect face
     for( size_t i = 0; i < faces.size(); i++)
     {
@@ -78,8 +71,9 @@ void FaceDetector::process(cv::Mat frame)
         */
 
     }
-    const QImage image(frame.data, frame.cols, frame.rows, frame.step,
+    const QImage image((const unsigned char*)frame.data, frame.cols, frame.rows, frame.step,
                        QImage::Format_RGB888, &matDeleter, new cv::Mat(frame));
+    image.rgbSwapped();
     Q_ASSERT(image.constBits() == frame.data);
     emit image_signal(image);
 }

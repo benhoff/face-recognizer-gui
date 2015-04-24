@@ -69,6 +69,11 @@ DisplayWidget::~DisplayWidget()
     cameraThread_.wait();
 }
 
+void DisplayWidget::change_face_cascade_filename(QString filename)
+{
+    emit facecascade_name_signal(filename);
+}
+
 void DisplayWidget::openFileDialog()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Video"));
