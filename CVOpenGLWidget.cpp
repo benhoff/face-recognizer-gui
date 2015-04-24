@@ -81,7 +81,7 @@ void CVOpenGLWidget::renderImage()
         {
             int imW = qtImage.width();
             int imH = qtImage.height();
-
+            /*
             // Does the image need to be resized to fit widget?
             if ( imW != this->size().width() && imH != this->size().height() )
             {
@@ -92,7 +92,8 @@ void CVOpenGLWidget::renderImage()
             }
             else
                 image = qtImage;
-
+            */
+            image = qtImage;
             glRasterPos2i( positionX_, positionY_);
 
             imW = image.width();

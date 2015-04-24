@@ -10,10 +10,12 @@ void Camera::runSlot()
     // TODO: clean up. Would be nice not to have nested `if` statements
     // FIXME: Clean up this logic, if switch from camera to file, this will be wrong
     if (!videoCapture_)
+    {
         if (usingVideoCamera_)
             videoCapture_.reset(new cv::VideoCapture(cameraIndex_));
         else
             videoCapture_.reset(new cv::VideoCapture(videoFileName_));
+    }
     if (videoCapture_->isOpened())
     {
         timer_.start(0, this);

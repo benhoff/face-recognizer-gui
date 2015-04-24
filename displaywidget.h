@@ -14,6 +14,7 @@
 #include <iostream>
 #include <stdio.h>
 
+#include "imageviewer.h"
 #include "CVOpenGLWidget.h"
 #include "camera.h"
 #include "faceDetector.h"
@@ -22,7 +23,6 @@ class DisplayWidget : public QWidget
 {
     Q_OBJECT
 public:
-    CVOpenGLWidget* openGLWidget_;
     explicit DisplayWidget(QWidget *parent = 0);
     ~DisplayWidget();
 
@@ -39,6 +39,8 @@ private:
     Camera* camera_;
     QThread faceDetectThread_;
     QThread cameraThread_;
+    CVOpenGLWidget* openGLWidget_;
+    ImageViewer* image_viewer_;
 };
 
 #endif // DISPLAYWIDGET_H

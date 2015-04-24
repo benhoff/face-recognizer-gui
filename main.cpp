@@ -11,7 +11,6 @@ Q_DECLARE_METATYPE(cv::Mat)
 int main( int argc, char* argv[] )
 {
     qRegisterMetaType<cv::Mat>();
-    qDebug() << cv::cuda::getCudaEnabledDeviceCount();
 	QApplication app(argc, argv);
     MainWindow window;
     window.show();
