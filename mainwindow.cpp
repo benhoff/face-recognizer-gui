@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     cascade_file_menu->addAction(face_cascade_);
 
     DisplayWidget* display = new DisplayWidget(this);
+    display->connect(this, SIGNAL(face_cascade_filename_signal(QString)),
+                     SLOT(change_face_cascade_filename(QString)));
 
     setCentralWidget(display);
 }

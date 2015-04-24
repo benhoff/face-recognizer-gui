@@ -6,12 +6,14 @@
 #include <QTimerEvent>
 #include <QDebug>
 #include <QImage>
+#include <QString>
 #include <opencv2/opencv.hpp>
 
 class FaceDetector : public QObject
 {
     Q_OBJECT
-
+    QString facecascade_filename_;
+    QString eyecascade_filename_;
     QBasicTimer timer_;
     cv::Mat frame_;
     bool processAll_;
@@ -25,7 +27,14 @@ class FaceDetector : public QObject
     static void matDeleter(void* mat);
 
 public:
-    explicit FaceDetector(QObject *parent = 0);
+    FaceDetector(QObject *parent=0) : QObject(parent), processAll_(true)
+    {
+        facecascade_filename_ = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_frontalface_default.xml";
+        eyecascade_filename_ = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_eye.xml";
+
+        loadFiles(facecascade_filename_.toStdString().c_str(),
+                  eyecascade_filename_.toStdString().c_str());
+    }
     void setProcessAll(bool all);
     ~FaceDetector();
 
@@ -34,14 +43,7 @@ signals:
 
 public slots:
     void processFrame(const cv::Mat& frame);
+    void facecascade_filename(QString filename);
 };
 
-FaceDetector::FaceDetector(QObject *parent ) : QObject(parent), processAll_(true)
-{
-    // TODO: STOP HARD CODING THIS!
-    cv::String faceCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_frontalface_default.xml";
-    cv::String eyeCascadeFilename = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_eye.xml";
-
-    loadFiles(faceCascadeFilename, eyeCascadeFilename);
-}
 #endif // FACEDETECTOR_H

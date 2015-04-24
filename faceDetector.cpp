@@ -46,7 +46,7 @@ void FaceDetector::process(cv::Mat frame)
     //-- Detect face
     for( size_t i = 0; i < faces.size(); i++)
     {
-        cv::rectangle(frame, faces[i], cv::Scalar( 255, 0, 255 ));
+        cv::rectangle(grey_image, faces[i], cv::Scalar( 255, 0, 255 ));
         /*
         cv::Point center( faces[i].x + faces[i].width*0.5,
                   faces[i].y + faces[i].height*0.5);
@@ -102,3 +102,9 @@ void FaceDetector::matDeleter(void *mat)
     delete static_cast<cv::Mat*>(mat);
 }
 
+void FaceDetector::facecascade_filename(QString filename)
+{
+    facecascade_filename_ = filename;
+    // FIXME: Incorrect Implementation
+    loadFiles(filename.toStdString().c_str(), filename.toStdString().c_str());
+}

@@ -29,7 +29,7 @@ DisplayWidget::DisplayWidget(QWidget *parent) : QWidget(parent)
 
     faceDector_ = new FaceDetector();
 
-    faceDector_->setProcessAll(false);
+    //faceDector_->setProcessAll(false);
 
     faceDetectThread_.start();
     cameraThread_.start();
@@ -57,6 +57,9 @@ DisplayWidget::DisplayWidget(QWidget *parent) : QWidget(parent)
 
     QObject::connect(this, SIGNAL(videoFileNameSignal(QString)),
                      camera_, SLOT(videoFileNameSlot(QString)));
+
+    faceDector_->connect(this, SIGNAL(facecascade_name_signal(QString)),
+                     SLOT(facecascade_filename(QString)));
 }
 
 DisplayWidget::~DisplayWidget()
