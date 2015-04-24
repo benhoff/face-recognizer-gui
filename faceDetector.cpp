@@ -43,10 +43,10 @@ void FaceDetector::process(cv::Mat frame)
     // Calculate the camera size and set the size to 1/8 of screen height
     faceCascade.detectMultiScale(grey_image, faces, 1.1, 2,  0|CV_HAAR_SCALE_IMAGE,
                                  cv::Size(frame.cols/4, frame.rows/4)); // Minimum size of obj
-    //-- Detect face
+    //-- Draw rectangles around faces
     for( size_t i = 0; i < faces.size(); i++)
     {
-        cv::rectangle(grey_image, faces[i], cv::Scalar( 255, 0, 255 ));
+        cv::rectangle(frame, faces[i], cv::Scalar( 255, 0, 255 ));
         /*
         cv::Point center( faces[i].x + faces[i].width*0.5,
                   faces[i].y + faces[i].height*0.5);
