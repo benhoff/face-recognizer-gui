@@ -70,7 +70,9 @@ void CVOpenGLWidget::updateScene()
 void CVOpenGLWidget::renderImage()
 {
     makeCurrent();
-    glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT); 
+    //I think you can delete this line as you clear the color buffer 
+    // in paintGL right before calling this method. Alternatively you could remove it from paintGL
 
     if (!qtImage.isNull())
     {
