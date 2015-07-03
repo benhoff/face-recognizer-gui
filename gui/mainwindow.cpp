@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "gui/mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -17,7 +17,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 void MainWindow::change_face_cascade()
 {
-    QString filename = QFileDialog::getOpenFileName(this, tr("HaarCascade Filename"));
+    QString filename = QFileDialog::getOpenFileName(this, 
+		    				    tr("HaarCascade Filename"));
+
     emit face_cascade_filename_signal(filename);
 }
 

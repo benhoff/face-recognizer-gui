@@ -24,6 +24,7 @@ class Camera : public QObject
     bool usingVideoCamera_;
     int cameraIndex_;
     cv::String videoFileName_;
+
 public:
     Camera(QObject* parent=0) : QObject(parent)
     {
@@ -48,4 +49,3 @@ signals:
 private:
     void timerEvent(QTimerEvent * ev);
 };
-

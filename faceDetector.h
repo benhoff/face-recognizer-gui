@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QBasicTimer>
 #include <QTimerEvent>
+#include <QDir>
 #include <QDebug>
 #include <QImage>
 #include <QString>
@@ -29,8 +30,9 @@ class FaceDetector : public QObject
 public:
     FaceDetector(QObject *parent=0) : QObject(parent), processAll_(true)
     {
-        facecascade_filename_ = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_frontalface_default.xml";
-        eyecascade_filename_ = "/home/hoff/swdev/opencv_tut/opencv/haarcascade_eye.xml";
+        QDir working_directory();
+        facecascade_filename_ = working_directory.absoluteFilePath("haarcascade_frontalface_default.xml");
+        eyecascade_filename_ = working_directory.absoluteFilePath("haarcascade_eye.xml");
 
         loadFiles(facecascade_filename_.toStdString().c_str(),
                   eyecascade_filename_.toStdString().c_str());

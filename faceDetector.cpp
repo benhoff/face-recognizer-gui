@@ -104,7 +104,12 @@ void FaceDetector::matDeleter(void *mat)
 
 void FaceDetector::facecascade_filename(QString filename)
 {
-    facecascade_filename_ = filename;
+    cv::String temp = filename.toStdString().c_str();
+    if( !faceCascade.load( temp ) )
+    {
+        std::cout << "Error Loading" << faceCascadeFilename << std::endl;
+    }
+    facecascade_filename_ = temp;
     // FIXME: Incorrect Implementation
     loadFiles(filename.toStdString().c_str(), filename.toStdString().c_str());
 }

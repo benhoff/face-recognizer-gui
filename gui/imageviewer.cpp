@@ -1,4 +1,4 @@
-#include "imageviewer.h"
+#include "gui/imageviewer.h"
 
 void ImageViewer::set_image(const QImage &img)
 {

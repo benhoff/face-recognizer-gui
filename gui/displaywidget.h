@@ -14,8 +14,7 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "imageviewer.h"
-#include "CVOpenGLWidget.h"
+#include "gui/imageviewer.h"
 #include "camera.h"
 #include "faceDetector.h"
 

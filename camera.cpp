@@ -1,6 +1,5 @@
 #include "camera.h"
 
-
 Camera::~Camera()
 {
 }
@@ -8,8 +7,7 @@ Camera::~Camera()
 void Camera::runSlot()
 {
     // TODO: clean up. Would be nice not to have nested `if` statements
-    // FIXME: Clean up this logic, if switch from camera to file, this will be wrong
-    if (!videoCapture_)
+    if (!videoCapture_ or !usingVideoCamera_)
     {
         if (usingVideoCamera_)
             videoCapture_.reset(new cv::VideoCapture(cameraIndex_));

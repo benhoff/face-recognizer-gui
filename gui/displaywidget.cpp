@@ -1,4 +1,4 @@
-#include "displaywidget.h"
+#include "gui/displaywidget.h"
 
 DisplayWidget::DisplayWidget(QWidget *parent) : QWidget(parent)
 {
@@ -16,11 +16,11 @@ DisplayWidget::DisplayWidget(QWidget *parent) : QWidget(parent)
 
     QVBoxLayout *layout = new QVBoxLayout;
     image_viewer_ = new ImageViewer(this);
-    //openGLWidget_ = new CVOpenGLWidget(this);
-    QRadioButton *sourceSelector = new QRadioButton("Stream from video camera_", this);
+    QRadioButton *sourceSelector = new QRadioButton("Stream from video camera_", 
+		    				    this);
+
     sourceSelector->setDown(true);
 
-    //layout->addWidget(openGLWidget_);
     layout->addWidget(image_viewer_);
     layout->addLayout(horizontalLayout);
     layout->addWidget(sourceSelector);
@@ -28,7 +28,6 @@ DisplayWidget::DisplayWidget(QWidget *parent) : QWidget(parent)
     setLayout(layout);
 
     camera_ = new Camera();
-
     faceDector_ = new FaceDetector();
 
     //faceDector_->setProcessAll(false);
@@ -38,16 +37,14 @@ DisplayWidget::DisplayWidget(QWidget *parent) : QWidget(parent)
 
     camera_->moveToThread(&cameraThread_);
     faceDector_->moveToThread(&faceDetectThread_);
+
     // TODO: Add in slot to turn off camera_, or something
     image_viewer_->connect(faceDector_,
                            SIGNAL(image_signal(QImage)),
                            SLOT(set_image(QImage)));
-    /*
-    openGLWidget_->connect(faceDector_,
-                           SIGNAL(image_signal(QImage)),
-                           SLOT(imageSlot(QImage)));
-    */
-    faceDector_->connect(camera_, SIGNAL(matReady(cv::Mat)), SLOT(processFrame(cv::Mat)));
+
+    faceDector_->connect(camera_, SIGNAL(matReady(cv::Mat)), 
+		         SLOT(processFrame(cv::Mat)));
 
     QObject::connect(runButton, SIGNAL(clicked()),
                      camera_, SLOT(runSlot()));
