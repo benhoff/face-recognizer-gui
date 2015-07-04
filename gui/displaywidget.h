@@ -38,7 +38,6 @@ private:
     Camera* camera_;
     QThread faceDetectThread_;
     QThread cameraThread_;
-    CVOpenGLWidget* openGLWidget_;
     ImageViewer* image_viewer_;
 };
 

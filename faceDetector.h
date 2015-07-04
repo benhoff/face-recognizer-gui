@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QImage>
 #include <QString>
+#include <QResource>
 #include <opencv2/opencv.hpp>
 
 class FaceDetector : public QObject
@@ -30,10 +31,8 @@ class FaceDetector : public QObject
 public:
     FaceDetector(QObject *parent=0) : QObject(parent), processAll_(true)
     {
-        QDir working_directory();
-        facecascade_filename_ = working_directory.absoluteFilePath("haarcascade_frontalface_default.xml");
-        eyecascade_filename_ = working_directory.absoluteFilePath("haarcascade_eye.xml");
-
+        facecascade_filename_ = "resources/haarcascade_frontalface_default.xml";
+        eyecascade_filename_ = "resources/haarcascade_eye.xml";
         loadFiles(facecascade_filename_.toStdString().c_str(),
                   eyecascade_filename_.toStdString().c_str());
     }

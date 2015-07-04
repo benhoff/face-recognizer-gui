@@ -107,9 +107,9 @@ void FaceDetector::facecascade_filename(QString filename)
     cv::String temp = filename.toStdString().c_str();
     if( !faceCascade.load( temp ) )
     {
-        std::cout << "Error Loading" << faceCascadeFilename << std::endl;
+        std::cout << "Error Loading" << filename.toStdString() << std::endl;
     }
-    facecascade_filename_ = temp;
+    facecascade_filename_ = filename;
     // FIXME: Incorrect Implementation
     loadFiles(filename.toStdString().c_str(), filename.toStdString().c_str());
 }
