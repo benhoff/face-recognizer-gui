@@ -71,6 +71,7 @@ void FaceDetector::process(cv::Mat frame)
         */
 
     }
+    cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
     const QImage image((const unsigned char*)frame.data, frame.cols, frame.rows, frame.step,
                        QImage::Format_RGB888, &matDeleter, new cv::Mat(frame));
     image.rgbSwapped();
