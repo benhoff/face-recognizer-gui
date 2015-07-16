@@ -26,8 +26,9 @@ class Camera : public QObject
     cv::String videoFileName_;
 
 public:
-    Camera(QObject* parent=0) : QObject(parent)
+    Camera(int camera_index=0, QObject* parent=0) : QObject(parent)
     {
+        cameraIndex_ = camera_index;
         usingVideoCamera_ = true;
     }
 
