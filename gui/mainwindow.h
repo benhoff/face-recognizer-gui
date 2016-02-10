@@ -22,6 +22,7 @@ private slots:
 
 private:
     QAction* face_cascade_;
+    QMenu* cascade_file_menu;
 };
 
 #endif // MAINWINDOW_H
