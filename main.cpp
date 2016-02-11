@@ -4,7 +4,7 @@
 #include <opencv2/core/cuda_types.hpp>
 #include <opencv2/core/cuda.inl.hpp>
 #include <QDebug>
-#include "mainwindow.h"
+#include "gui/mainwindow.h"
 
 Q_DECLARE_METATYPE(cv::Mat)
 /** @function main */
