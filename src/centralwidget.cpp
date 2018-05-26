@@ -1,6 +1,6 @@
-#include "gui/displaywidget.h"
+#include "centralwidget.h"
 
-DisplayWidget::DisplayWidget(QWidget *parent) : QWidget(parent)
+CentralWidget::CentralWidget(QWidget *parent) : QWidget(parent)
 {
     QStringList cameraOptions;
     cameraOptions << "0" << "1" << "2" << "3" << "4" << "5" << "6";
@@ -65,7 +65,7 @@ DisplayWidget::DisplayWidget(QWidget *parent) : QWidget(parent)
                      SLOT(facecascade_filename(QString)));
 }
 
-DisplayWidget::~DisplayWidget()
+CentralWidget::~CentralWidget()
 {
     faceDector_->~FaceDetector();
     camera_->~Camera();
@@ -75,12 +75,12 @@ DisplayWidget::~DisplayWidget()
     cameraThread_.wait();
 }
 
-void DisplayWidget::change_face_cascade_filename(QString filename)
+void CentralWidget::change_face_cascade_filename(QString filename)
 {
     emit facecascade_name_signal(filename);
 }
 
-void DisplayWidget::openFileDialog()
+void CentralWidget::openFileDialog()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Video"));
     emit videoFileNameSignal(filename);

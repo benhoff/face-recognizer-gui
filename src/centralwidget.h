@@ -1,5 +1,5 @@
-#ifndef DISPLAYWIDGET_H
-#define DISPLAYWIDGET_H
+#ifndef CENTRALWIDGET_H
+#define CENTRALWIDGET_H
 
 #include <QWidget>
 
@@ -11,19 +11,16 @@
 #include <QFileDialog>
 #include <QThread>
 
-#include <iostream>
-#include <stdio.h>
-
 #include "gui/imageviewer.h"
 #include "camera.h"
 #include "faceDetector.h"
 
-class DisplayWidget : public QWidget
+class CentralWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit DisplayWidget(QWidget *parent = 0);
-    ~DisplayWidget();
+    explicit CentralWidget(QWidget *parent = 0);
+    ~CentralWidget();
 
 signals:
     void videoFileNameSignal(QString videoFileName);
