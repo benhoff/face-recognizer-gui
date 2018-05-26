@@ -1,4 +1,4 @@
 # face-recognizer-gui
 Compile using Qt5 and OpenCV 3
 
-Some users have had sucess compiling with Qt4 by changing the source code. YMMV.
+See [my blog post](http://benhoff.net/face-detection-opencv-pyqt.html) for an implementation of facial detection in Python/PyQt!
