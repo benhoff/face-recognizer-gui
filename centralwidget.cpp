@@ -1,4 +1,4 @@
-#include "gui/displaywidget.h"
+#include "gui/centralwidget.h"
 
 DisplayWidget::DisplayWidget(QWidget *parent) : QWidget(parent)
 {

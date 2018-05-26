@@ -1,30 +1,38 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2015-03-25T18:15:50
-#
-#-------------------------------------------------
+QT += core gui widgets
 
-QT += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++11
 TARGET = opencv
 TEMPLATE = app
-DESTDIR = $$PWD
-INCLUDEPATH += /usr/include/opencv \
-    ./resources
 
-LIBS += -L/lib -I/usr/include/opencv -lopencv_core -lopencv_cudaimgproc -lopencv_cudaobjdetect -lopencv_imgcodecs -lopencv_imgproc -lopencv_objdetect -lopencv_video -lopencv_videoio -lopencv_videostab
+unix: INCLUDEPATH += /usr/include/opencv2
+# Windows users need to add the correct include path! Uncomment below line and fix path!
+win32: INCLUDEPATH += C:\opencv\build\include
+
+
+unix {
+    !contains(QT_CONFIG, no-pkg-config) {
+            CONFIG += link_pkgconfig
+            PKGCONFIG += opencv
+    } else {
+            LIBS += -lopencv_core -lopencv_imgproc -lopencv_objdetect
+    }
+}
+win32 {
+    # Windows users need to correct the lib path! Uncomment below and fix paths!
+    # LIBS+= C:\opencv-build\bin\libopencv_core320.dll
+    # LIBS+= C:\opencv-build\bin\libopencv_imgproc320.dll
+    # LIBS+= C:\opencv-build\bin\libopencv_objdetect320.dll
+}
 
 SOURCES += main.cpp \
-    gui/mainwindow.cpp \
+    mainwindow.cpp \
     camera.cpp \
-    gui/displaywidget.cpp \
     faceDetector.cpp \
-    gui/imageviewer.cpp
+    gui/imageviewer.cpp \
+    centralwidget.cpp
 
-HEADERS += gui/mainwindow.h \
+HEADERS += mainwindow.h \
     camera.h \
-    gui/displaywidget.h \
     faceDetector.h \
-    gui/imageviewer.h
+    gui/imageviewer.h \
+    centralwidget.h
