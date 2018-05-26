@@ -2,9 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QMenuBar>
 #include <QMenu>
 #include <QAction>
+#include <QCamera>
+#include <QCameraInfo>
 #include "centralwidget.h"
 
 class MainWindow : public QMainWindow
@@ -21,8 +22,14 @@ private slots:
     void change_face_cascade();
 
 private:
+    void set_camera(const QCameraInfo &camera_info);
+    void set_camera_action(QAction *camera_action);
+    void _setup_camera_devices();
+
+    QScopedPointer<QCamera> _camera;
     QAction* face_cascade_;
     QMenu* cascade_file_menu;
+    CentralWidget *_central_widget;
 };
 
 #endif // MAINWINDOW_H

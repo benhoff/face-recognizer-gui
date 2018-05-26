@@ -1,4 +1,4 @@
-QT += core gui widgets
+QT += core gui widgets multimedia
 
 CONFIG += c++11
 TARGET = opencv
